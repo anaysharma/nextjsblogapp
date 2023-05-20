@@ -23,6 +23,7 @@ export default function Input({
 }: InputProps) {
 	return (
 		<input
+			className="w-full px-4 py-3 rounded border"
 			type={type}
 			value={value}
 			onChange={onChange}

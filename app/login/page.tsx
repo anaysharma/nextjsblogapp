@@ -34,6 +34,7 @@ export default function page() {
 			if (callback?.ok) router.refresh();
 			if (callback?.error) throw new Error('wrong credentials');
 		});
+		router.push('/');
 	};
 
 	return (
@@ -59,7 +60,7 @@ export default function page() {
 			<button type="submit">Login</button>
 			<div>
 				<div>
-					Don't have an account yet? <Link href="/register">Login</Link>
+					Don't have an account yet? <Link href="/register">register</Link>
 				</div>
 			</div>
 		</form>
