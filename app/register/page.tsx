@@ -69,7 +69,7 @@ export default function page() {
 					value={state.password}
 				></Input>
 			</div>
-			<button type="submit"></button>
+			<button type="submit">sign up</button>
 			<div>
 				<div>
 					Already have an account? <Link href="/login">Login</Link>

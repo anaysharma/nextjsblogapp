@@ -5,6 +5,7 @@ import axios from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
+import { signIn } from 'next-auth/react';
 
 interface InitialStateProps {
 	email: string;
@@ -55,7 +56,7 @@ export default function page() {
 					value={state.password}
 				></Input>
 			</div>
-			<button type="submit"></button>
+			<button type="submit">Login</button>
 			<div>
 				<div>
 					Don't have an account yet? <Link href="/register">Login</Link>
