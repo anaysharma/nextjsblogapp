@@ -1,6 +1,5 @@
 import getCurrentUser from '@/app/actions/getCurrentUser';
 import getBlogsById from '@/app/actions/getBlogsById';
-// import SingleBlog from '@/components/SingleBlog';
 import BlogId from '@/components/BlogId';
 
 interface IParams {
@@ -24,6 +23,8 @@ export default async function page({ params }: { params: IParams }) {
 					imageSrc={blog?.imageSrc}
 					currentUser={currentUser?.id}
 					userId={blog?.user.id}
+					likes={blog?.likes}
+					dislikes={blog?.dislikes}
 				/>
 			</div>
 		</div>

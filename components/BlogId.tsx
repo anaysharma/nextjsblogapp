@@ -6,7 +6,6 @@ import React, { ChangeEvent, FormEvent, useState } from 'react';
 import Image from 'next/image';
 import ImageUpload from './imageUpload';
 import Input from './input/input';
-import getCurrentUser from '@/app/actions/getCurrentUser';
 
 interface BlogProps {
 	name?: string;
@@ -15,6 +14,8 @@ interface BlogProps {
 	blogId?: string;
 	userId?: string;
 	currentUser?: string;
+	likes?: number;
+	dislikes?: number;
 }
 
 interface InitalStateProps {
@@ -36,11 +37,35 @@ export default function BlogId({
 	blogId,
 	userId,
 	currentUser,
+	likes,
+	dislikes,
 }: BlogProps) {
 	const router = useRouter();
 
 	const [onActive, setOnActive] = useState(false);
 	const [state, setState] = useState(initialState);
+
+	const handleLike = () => {
+		axios
+			.put(`/api/blogs/${blogId}/increment?field=likes`)
+			.then(() => {
+				router.refresh();
+			})
+			.catch((error) => {
+				console.error('Error incrementing likes:', error);
+			});
+	};
+
+	const handleDislike = () => {
+		axios
+			.put(`/api/blogs/${blogId}/increment?field=dislikes`)
+			.then(() => {
+				router.refresh();
+			})
+			.catch((error) => {
+				console.error('Error incrementing dislikes:', error);
+			});
+	};
 
 	function handleChange(
 		event: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>
@@ -106,14 +131,14 @@ export default function BlogId({
 			</div>
 
 			<div className="flex justify-between">
-				<div>
-					<button className="px-8 py-2 border rounded bg-gray-300">like</button>
-					<button className="px-8 py-2 border rounded bg-gray-300">
-						dislike
+				<div className="flex gap-4">
+					<button onClick={handleLike} className="px-8 py-2 border rounded">
+						like ({likes})
 					</button>
-					<button className="px-8 py-2 border rounded bg-gray-300">
-						comment
+					<button onClick={handleDislike} className="px-8 py-2 border rounded">
+						dislike ({dislikes})
 					</button>
+					<button className="px-8 py-2 border rounded">comment</button>
 				</div>
 
 				{userId === currentUser && (

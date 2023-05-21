@@ -24,11 +24,22 @@ model User {
 }
 
 model blog {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
   name        String
-  createdAt   DateTime @default(now())
+  createdAt   DateTime  @default(now())
   imageSrc    String
   description String
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId      String   @db.ObjectId
+  likes       Int       @default(0)
+  dislikes    Int       @default(0)
+  comments    Comment[]
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String    @db.ObjectId
+}
+
+model Comment {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  text      String
+  createdAt DateTime @default(now())
+  blog      blog     @relation(fields: [blogId], references: [id])
+  blogId    String   @db.ObjectId
 }
