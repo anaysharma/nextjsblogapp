@@ -21,7 +21,11 @@ export default function page() {
 	const [state, setState] = useState<InitialStateProps>(initialState);
 	const router = useRouter();
 
-	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+	const handleChange = (
+		e:
+			| React.ChangeEvent<HTMLInputElement>
+			| React.ChangeEvent<HTMLTextAreaElement>
+	) => {
 		setState({ ...state, [e.target.name]: e.target.value });
 	};
 
@@ -38,31 +42,46 @@ export default function page() {
 	};
 
 	return (
-		<form action="" onSubmit={handleSubmit}>
-			<div>
-				<Input
-					name="email"
-					placeholder="Email"
-					id="email"
-					type="email"
-					onChange={handleChange}
-					value={state.email}
-				></Input>
-				<Input
-					name="password"
-					placeholder="Password"
-					id="password"
-					type="password"
-					onChange={handleChange}
-					value={state.password}
-				></Input>
-			</div>
-			<button type="submit">Login</button>
-			<div>
-				<div>
-					Don't have an account yet? <Link href="/register">register</Link>
+		<div className="h-screen w-screen grid place-items-center">
+			<form
+				className="rounded border shadow-lg p-6 w-96 flex flex-col items-center gap-6"
+				action=""
+				onSubmit={handleSubmit}
+			>
+				fill in details to login
+				<div className="flex flex-col gap-4 w-full">
+					<Input
+						name="email"
+						placeholder="Email"
+						id="email"
+						type="email"
+						onChange={handleChange}
+						value={state.email}
+					></Input>
+					<Input
+						name="password"
+						placeholder="Password"
+						id="password"
+						type="password"
+						onChange={handleChange}
+						value={state.password}
+					></Input>
 				</div>
-			</div>
-		</form>
+				<button
+					className="px-10 py-3 bg-teal-600 rounded text-white"
+					type="submit"
+				>
+					Login
+				</button>
+				<div>
+					<div>
+						Don't have an account yet?{' '}
+						<Link className="text-teal-600" href="/register">
+							register
+						</Link>
+					</div>
+				</div>
+			</form>
+		</div>
 	);
 }

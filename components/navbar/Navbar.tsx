@@ -22,7 +22,10 @@ export default function Navbar({ currentUser }: UserMenuProps) {
 					{currentUser ? (
 						<button onClick={() => signOut()}>sign out</button>
 					) : (
-						<Link href="/register">register</Link>
+						<>
+							<Link href="/register">register</Link>
+							<Link href="/login">login</Link>
+						</>
 					)}
 				</div>
 			</nav>

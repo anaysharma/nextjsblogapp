@@ -18,7 +18,7 @@ export default async function RootLayout({
 	const currentUser = await getCurrentUser();
 	return (
 		<html lang="en">
-			<body className={inter.className + ' pt-14'}>
+			<body className={inter.className}>
 				{children}
 				<Navbar currentUser={currentUser} />
 			</body>

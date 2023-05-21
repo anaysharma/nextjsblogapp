@@ -35,7 +35,9 @@ export default function page() {
 		router.refresh();
 	};
 
-	function handleChange(event: ChangeEvent<HTMLInputElement>) {
+	function handleChange(
+		event: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>
+	) {
 		setState({ ...state, [event.target.name]: event.target.value });
 	}
 
@@ -47,17 +49,20 @@ export default function page() {
 	};
 
 	return (
-		<form onSubmit={onSubmit} className="w-[600px] h-[700px] mx-auto py-12">
-			<div>
+		<form
+			onSubmit={onSubmit}
+			className="flex mx-auto w-full pt-28 px-[10vw] gap-10"
+		>
+			<div className="flex-1">
 				<ImageUpload
 					value={state.imageSrc}
 					onChange={(value) => setCustomValue('imageSrc', value)}
 				/>
 			</div>
 
-			<div className="flex flex-col justify-center h-[450px] w-[350px] mx-auto gap-2">
+			<div className="flex flex-col gap-6 flex-1">
 				<Input
-					placeholder="Blog header"
+					placeholder="Blog Heading"
 					id="name"
 					type="text"
 					value={state.name}
@@ -73,8 +78,12 @@ export default function page() {
 					name="description"
 					onChange={handleChange}
 				/>
-				<div></div>
-				<button type="submit">Submit</button>
+				<button
+					className="ml-auto px-10 py-3 bg-teal-600 text-white rounded"
+					type="submit"
+				>
+					Submit
+				</button>
 			</div>
 		</form>
 	);
