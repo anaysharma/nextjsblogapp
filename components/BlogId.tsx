@@ -14,21 +14,14 @@ interface BlogProps {
 	blogId?: string;
 	userId?: string;
 	currentUser?: string;
-	likes?: number;
-	dislikes?: number;
+	comments?: any;
 }
 
 interface InitalStateProps {
-	name: string;
-	description: string;
+	name?: string;
+	description?: string;
 	imageSrc: string;
 }
-
-const initialState: InitalStateProps = {
-	name: '',
-	description: '',
-	imageSrc: '',
-};
 
 export default function BlogId({
 	name,
@@ -37,41 +30,29 @@ export default function BlogId({
 	blogId,
 	userId,
 	currentUser,
-	likes,
-	dislikes,
+	comments,
 }: BlogProps) {
 	const router = useRouter();
-
+	const [commentActive, setCommentActive] = useState<boolean>(false);
+	const [comment, setComment] = useState({ text: '', blogId });
 	const [onActive, setOnActive] = useState(false);
-	const [state, setState] = useState(initialState);
+	const [state, setState] = useState<InitalStateProps>({
+		name,
+		description,
+		imageSrc,
+	});
 
-	const handleLike = () => {
-		axios
-			.put(`/api/blogs/${blogId}/increment?field=likes`)
-			.then(() => {
-				router.refresh();
-			})
-			.catch((error) => {
-				console.error('Error incrementing likes:', error);
-			});
-	};
-
-	const handleDislike = () => {
-		axios
-			.put(`/api/blogs/${blogId}/increment?field=dislikes`)
-			.then(() => {
-				router.refresh();
-			})
-			.catch((error) => {
-				console.error('Error incrementing dislikes:', error);
-			});
-	};
-
-	function handleChange(
+	const handleComment = (
 		event: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>
-	) {
+	) => {
+		setComment({ text: event.target.value, blogId });
+	};
+
+	const handleChange = (
+		event: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>
+	) => {
 		setState({ ...state, [event.target.name]: event.target.value });
-	}
+	};
 
 	const onSubmit = (event: FormEvent) => {
 		event.preventDefault();
@@ -103,6 +84,26 @@ export default function BlogId({
 			});
 	};
 
+	const deleteComment = (id: string) => {
+		axios
+			.delete(`/api/comment/${id}`)
+			.then(() => {
+				router.refresh();
+			})
+			.catch(console.error);
+	};
+
+	const handleCommentSubmit = (event: FormEvent) => {
+		event.preventDefault();
+
+		axios
+			.post('/api/comment', comment)
+			.then(() => {
+				router.refresh();
+			})
+			.catch(console.error);
+	};
+
 	const setCustomValue = (id: any, value: any) => {
 		setState((prevValues) => ({
 			...prevValues,
@@ -132,13 +133,15 @@ export default function BlogId({
 
 			<div className="flex justify-between">
 				<div className="flex gap-4">
-					<button onClick={handleLike} className="px-8 py-2 border rounded">
-						like ({likes})
+					<button onClick={() => {}} className="px-8 py-2 border rounded">
+						like ({0})
 					</button>
-					<button onClick={handleDislike} className="px-8 py-2 border rounded">
-						dislike ({dislikes})
+					<button
+						className="px-8 py-2 border rounded"
+						onClick={() => setCommentActive(!commentActive)}
+					>
+						comment
 					</button>
-					<button className="px-8 py-2 border rounded">comment</button>
 				</div>
 
 				{userId === currentUser && (
@@ -157,6 +160,47 @@ export default function BlogId({
 						</button>
 					</div>
 				)}
+			</div>
+
+			{commentActive && (
+				<form
+					className="flex gap-4 p-4 bg-gray-50 border shadow-md"
+					action=""
+					onSubmit={handleCommentSubmit}
+				>
+					<Input
+						placeholder="type your comment"
+						id="comment"
+						type="text"
+						value={comment.text}
+						name="commnet"
+						onChange={handleComment}
+					/>
+					<button
+						className="px-9 py-2 bg-teal-600 rounded text-white"
+						type="submit"
+					>
+						Done
+					</button>
+				</form>
+			)}
+
+			<div className="flex flex-col gap-4">
+				{comments?.map((item: any) => (
+					<div className="rounded bg-gray-50 p-4 border">
+						<div className="flex justify-between border-b border-gray-500 items-center">
+							<span className="text-sm text-gray-600">{item.userName}</span>
+							<button
+								className="text-sm text-red-500"
+								type="button"
+								onClick={() => deleteComment(item.id)}
+							>
+								delete
+							</button>
+						</div>
+						<p className="pt-2">{item.text}</p>
+					</div>
+				))}
 			</div>
 
 			{onActive && (

@@ -19,8 +19,9 @@ model User {
   hashedPassword String?
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
-
-  blogs blog[]
+  blogs          blog[]
+  Comment        Comment[]
+  Like           Like[]
 }
 
 model blog {
@@ -29,17 +30,28 @@ model blog {
   createdAt   DateTime  @default(now())
   imageSrc    String
   description String
-  likes       Int       @default(0)
-  dislikes    Int       @default(0)
   comments    Comment[]
   user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      String    @db.ObjectId
+  Like        Like[]
+}
+
+model Like {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String @db.ObjectId
+  blog   blog   @relation(fields: [blogId], references: [id], onDelete: Cascade)
+  blogId String @db.ObjectId
 }
 
 model Comment {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   text      String
   createdAt DateTime @default(now())
-  blog      blog     @relation(fields: [blogId], references: [id])
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  blog      blog     @relation(fields: [blogId], references: [id], onDelete: Cascade)
   blogId    String   @db.ObjectId
+  userId    String   @db.ObjectId
+  userName  String
 }
