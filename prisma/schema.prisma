@@ -53,5 +53,5 @@ model Comment {
   blog      blog     @relation(fields: [blogId], references: [id], onDelete: Cascade)
   blogId    String   @db.ObjectId
   userId    String   @db.ObjectId
-  userName  String
+  userName  String?
 }

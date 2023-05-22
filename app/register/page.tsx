@@ -22,7 +22,11 @@ export default function page() {
 	const [state, setState] = useState<InitialStateProps>(initialState);
 	const router = useRouter();
 
-	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+	const handleChange = (
+		e:
+			| React.ChangeEvent<HTMLInputElement>
+			| React.ChangeEvent<HTMLTextAreaElement>
+	) => {
 		setState({ ...state, [e.target.name]: e.target.value });
 	};
 

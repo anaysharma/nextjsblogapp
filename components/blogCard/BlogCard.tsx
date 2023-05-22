@@ -1,12 +1,17 @@
 'use client';
 
-import { SafeUser, safeBlogs } from '@/types';
+import { SafeUser } from '@/types';
 import Image from 'next/image';
 import Link from 'next/link';
 
 interface BlogProps {
 	key: string;
-	data: safeBlogs;
+	data: {
+		id: string;
+		name: string;
+		imageSrc: string;
+		description: string;
+	};
 }
 
 export default function BlogCard({ data, key }: BlogProps) {
