@@ -15,6 +15,8 @@ interface BlogProps {
 	userId?: string;
 	currentUser?: string;
 	comments?: any;
+
+	likes?: any;
 }
 
 interface InitalStateProps {
@@ -31,6 +33,7 @@ export default function BlogId({
 	userId,
 	currentUser,
 	comments,
+	likes,
 }: BlogProps) {
 	const router = useRouter();
 	const [commentActive, setCommentActive] = useState<boolean>(false);
@@ -84,6 +87,37 @@ export default function BlogId({
 			});
 	};
 
+	const handleLikes = () => {
+		const checkExistingLike = () => {
+			for (let like of likes) {
+				if (like.userId == currentUser) return true;
+			}
+			return false;
+		};
+
+		const getCurrentLikeId = () => {
+			for (let like of likes) {
+				if (like.userId === currentUser && like.blogId === blogId)
+					return like.id;
+			}
+		};
+
+		const currentID = getCurrentLikeId();
+		const likeExists = checkExistingLike();
+
+		if (likeExists) {
+			axios
+				.delete(`/api/like/${currentID}`)
+				.then(router.refresh)
+				.catch(console.error);
+		} else {
+			axios
+				.post('/api/like', { blogId })
+				.then(router.refresh)
+				.catch(console.error);
+		}
+	};
+
 	const deleteComment = (id: string) => {
 		axios
 			.delete(`/api/comment/${id}`)
@@ -133,8 +167,8 @@ export default function BlogId({
 
 			<div className="flex justify-between">
 				<div className="flex gap-4">
-					<button onClick={() => {}} className="px-8 py-2 border rounded">
-						like ({0})
+					<button onClick={handleLikes} className="px-8 py-2 border rounded">
+						like ({likes.length})
 					</button>
 					<button
 						className="px-8 py-2 border rounded"
@@ -187,8 +221,8 @@ export default function BlogId({
 
 			<div className="flex flex-col gap-4">
 				{comments?.map((item: any) => (
-					<div className="rounded bg-gray-50 p-4 border">
-						<div className="flex justify-between border-b border-gray-500 items-center">
+					<div className="rounded bg-gray-50 p-4 border" key={item.id}>
+						<div className="flex justify-between border-b pb-2 border-gray-200 items-center">
 							<span className="text-sm text-gray-600">{item.userName}</span>
 							<button
 								className="text-sm text-red-500"

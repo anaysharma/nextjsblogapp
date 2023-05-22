@@ -1,6 +1,7 @@
 import prisma from '../lib/prismadb';
 
-export default async function getBlogs(blogId: string) {
+export default async function getLikes(blogId: string | undefined) {
+	if (!blogId) return null;
 	try {
 		const likes = await prisma.like.findMany({
 			where: {
@@ -8,7 +9,7 @@ export default async function getBlogs(blogId: string) {
 			},
 		});
 
-		return likes.length;
+		return likes;
 	} catch (err: any) {
 		throw new Error(err);
 	}
